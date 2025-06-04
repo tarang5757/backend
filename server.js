@@ -4,17 +4,26 @@ const twilio = require("twilio");
 const dotenv = require("dotenv");
 
 const app = express();
+// Configure environment variables
+dotenv.config();
+
+// Proper CORS configuration for production
 app.use(
   cors({
     origin: "https://open-doors.ca",
     credentials: true,
   })
 );
-
 app.use(express.json());
 
-// Configure environment variables
-dotenv.config();
+// Hello World test route (still useful for deployment testing)
+app.get("/", (req, res) => {
+  res.json({
+    message: "Hello World! Backend is successfully deployed on Heroku!",
+    status: "operational",
+    environment: process.env.NODE_ENV || "development",
+  });
+});
 
 // Initialize Twilio client with hardcoded credentials
 const twilioClient = twilio(
@@ -249,7 +258,8 @@ app.post("/api/send-match-notification", async (req, res) => {
   }
 });
 
+// Add this at the end of the file, before any exports
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
