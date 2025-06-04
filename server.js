@@ -6,7 +6,8 @@ const dotenv = require("dotenv");
 const app = express();
 app.use(
   cors({
-    origin: "https://open-doors.ca", // only allow requests from your deployed frontend
+    origin: "https://open-doors.ca",
+    credentials: true,
   })
 );
 
