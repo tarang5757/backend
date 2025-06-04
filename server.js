@@ -4,7 +4,12 @@ const twilio = require("twilio");
 const dotenv = require("dotenv");
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://open-doors.ca", // only allow requests from your deployed frontend
+  })
+);
+
 app.use(express.json());
 
 // Configure environment variables
@@ -243,7 +248,7 @@ app.post("/api/send-match-notification", async (req, res) => {
   }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
