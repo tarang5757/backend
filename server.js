@@ -111,52 +111,71 @@ app.post("/api/send-match-notification", async (req, res) => {
         .json({ success: false, error: "Missing required notification data." });
     }
 
-    // Construct message bodies with detailed match information
-    const farmerMessageBody = `New Food Share Match Found!\n\nOrganization Details:\nName: ${
-      recipient.organizationName || "Unnamed Organization"
-    }\nContact: ${recipient.contactName || "Organization Contact"}\nPhone: ${
-      recipient.phone
-    }\n\nFood Needs:\n${
+    const farmerMessageBody = `New Open-Doors Match Found!
+
+    Organization Details:
+    Name: ${recipient.organizationName || "Unnamed Organization"}
+    Contact: ${recipient.contactName || "Organization Contact"}
+    Phone: ${recipient.phone}
+    Address: ${recipient.address || "N/A"}, ${recipient.city || "N/A"}, ${
+      recipient.state || "N/A"
+    }
+
+    Food Needs:
+    ${
       recipient.foodDetails.neededFoodTypes.length > 0
         ? recipient.foodDetails.neededFoodTypes
             .map((food) => `• ${food}`)
             .join("\n")
         : "Various produce"
-    }\n\nUrgency Level: ${
-      recipient.foodDetails.urgencyLevel || "Not specified"
-    }\nTransportation: ${
+    }
+
+    Urgency Level: ${recipient.foodDetails.urgencyLevel || "Not specified"}
+    Transportation: ${
       recipient.foodDetails.transportationAvailable
         ? "Can arrange pickup"
         : "Needs delivery"
-    }\nPickup Radius: ${
+    }
+    Pickup Radius: ${
       recipient.foodDetails.pickupRadius
         ? `${recipient.foodDetails.pickupRadius} miles`
         : "Not specified"
-    }\nPreferred Days: ${
+    }
+    Preferred Days: ${
       recipient.foodDetails.preferredDeliveryDays.length > 0
         ? recipient.foodDetails.preferredDeliveryDays.join(", ")
         : "Flexible"
-    }\n\nCheck the app for details!`;
+    }`;
 
-    const recipientMessageBody = `New Food Share Match Found!\n\nFarm Details:\nName: ${
-      farmer.organizationName || "Unnamed Farm"
-    }\nContact: ${farmer.contactName || "Farm Contact"}\nPhone: ${
-      farmer.phone
-    }\n\nAvailable Crops:\n${
+    const recipientMessageBody = `New Open Doors Match Found!
+
+    Farm Details:
+    Name: ${farmer.organizationName || "Unnamed Farm"}
+    Contact: ${farmer.contactName || "Farm Contact"}
+    Phone: ${farmer.phone}
+    Address: ${farmer.address || "N/A"}, ${farmer.city || "N/A"}, ${
+      farmer.state || "N/A"
+    }
+
+    Available Crops:
+    ${
       farmer.foodDetails.cropTypes.length > 0
         ? farmer.foodDetails.cropTypes.map((crop) => `• ${crop}`).join("\n")
         : "Various produce"
-    }\n\nDelivery: ${
+    }
+
+    Delivery: ${
       farmer.foodDetails.deliveryCapability ? "Offers delivery" : "Pickup only"
     }${
       farmer.foodDetails.deliveryCapability && farmer.foodDetails.deliveryRadius
         ? ` (within ${farmer.foodDetails.deliveryRadius} miles)`
         : ""
-    }\nAvailable Days: ${
+    }
+    Available Days: ${
       farmer.foodDetails.availableDays.length > 0
         ? farmer.foodDetails.availableDays.join(", ")
         : "Flexible"
-    }\n\nCheck the app for details!`;
+    }`;
 
     // Send notifications based on preferences
     const notificationPromises = [];
