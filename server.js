@@ -111,67 +111,69 @@ app.post("/api/send-match-notification", async (req, res) => {
         .json({ success: false, error: "Missing required notification data." });
     }
 
-    const farmerMessageBody = `New Open-Doors Match Found!
+    const farmerMessageBody = `📦 New Open-Doors Match Found!
 
-    Organization Details:
-    Name: ${recipient.organizationName || "Unnamed Organization"}
-    Contact: ${recipient.contactName || "Organization Contact"}
-    Phone: ${recipient.phone}
-    Address: ${recipient.address || "N/A"}, ${recipient.city || "N/A"}, ${
+📍 Organization:
+• Name: ${recipient.organizationName || "Unnamed Organization"}
+• Contact: ${recipient.contactName || "Organization Contact"}
+• Phone: ${recipient.phone}
+• Address: ${recipient.address || "N/A"}, ${recipient.city || "N/A"}, ${
       recipient.state || "N/A"
     }
 
-    Food Needs:
-    ${
-      recipient.foodDetails.neededFoodTypes.length > 0
-        ? recipient.foodDetails.neededFoodTypes
-            .map((food) => `• ${food}`)
-            .join("\n")
-        : "Various produce"
-    }
+🥕 Food Needs:
+${
+  recipient.foodDetails.neededFoodTypes.length > 0
+    ? recipient.foodDetails.neededFoodTypes
+        .map((food) => `• ${food}`)
+        .join("\n")
+    : "• Various produce"
+}
 
-    Urgency Level: ${recipient.foodDetails.urgencyLevel || "Not specified"}
-    Transportation: ${
+⚠️ Urgency: ${recipient.foodDetails.urgencyLevel || "Not specified"}
+🚚 Transportation: ${
       recipient.foodDetails.transportationAvailable
         ? "Can arrange pickup"
         : "Needs delivery"
     }
-    Pickup Radius: ${
+📏 Radius: ${
       recipient.foodDetails.pickupRadius
         ? `${recipient.foodDetails.pickupRadius} miles`
         : "Not specified"
     }
-    Preferred Days: ${
+📆 Preferred Days: ${
       recipient.foodDetails.preferredDeliveryDays.length > 0
         ? recipient.foodDetails.preferredDeliveryDays.join(", ")
         : "Flexible"
     }`;
 
-    const recipientMessageBody = `New Open Doors Match Found!
+    const recipientMessageBody = `🚜 New Open-Doors Match Found!
 
-    Farm Details:
-    Name: ${farmer.organizationName || "Unnamed Farm"}
-    Contact: ${farmer.contactName || "Farm Contact"}
-    Phone: ${farmer.phone}
-    Address: ${farmer.address || "N/A"}, ${farmer.city || "N/A"}, ${
+🌾 Farm:
+• Name: ${farmer.organizationName || "Unnamed Farm"}
+• Contact: ${farmer.contactName || "Farm Contact"}
+• Phone: ${farmer.phone}
+• Address: ${farmer.address || "N/A"}, ${farmer.city || "N/A"}, ${
       farmer.state || "N/A"
     }
 
-    Available Crops:
-    ${
-      farmer.foodDetails.cropTypes.length > 0
-        ? farmer.foodDetails.cropTypes.map((crop) => `• ${crop}`).join("\n")
-        : "Various produce"
-    }
+🥬 Crops Available:
+${
+  farmer.foodDetails.cropTypes.length > 0
+    ? farmer.foodDetails.cropTypes.map((crop) => `• ${crop}`).join("\n")
+    : "• Various produce"
+}
 
-    Delivery: ${
-      farmer.foodDetails.deliveryCapability ? "Offers delivery" : "Pickup only"
-    }${
-      farmer.foodDetails.deliveryCapability && farmer.foodDetails.deliveryRadius
-        ? ` (within ${farmer.foodDetails.deliveryRadius} miles)`
-        : ""
+🚛 Delivery: ${
+      farmer.foodDetails.deliveryCapability
+        ? `Offers delivery${
+            farmer.foodDetails.deliveryRadius
+              ? ` (within ${farmer.foodDetails.deliveryRadius} miles)`
+              : ""
+          }`
+        : "Pickup only"
     }
-    Available Days: ${
+📆 Available Days: ${
       farmer.foodDetails.availableDays.length > 0
         ? farmer.foodDetails.availableDays.join(", ")
         : "Flexible"
